@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  uniresolverdriverion:
+    image: uniresolverdriverion
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000

@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  uniresolverdriverion:
+    image: uniresolverdriverion
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5001
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
