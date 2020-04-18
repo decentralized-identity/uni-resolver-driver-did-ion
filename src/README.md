@@ -1,4 +1,4 @@
-# uni-resolver-driver-ion
+# uni-resolver-driver-did-ion
 Universal Resolver Driver for Identity Overlay Network (ION) DIDs
 
 ![DIF Logo](https://raw.githubusercontent.com/decentralized-identity/universal-resolver/master/docs/logo-dif.png)

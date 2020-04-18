@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26124.0
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uni-resolver-driver-did-ion", "src\uni-resolver-driver-did-ion.csproj", "{FF300B62-B19B-4090-A138-A0D391B08480}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uni-resolver-driver-did-ion.tests", "tests\uni-resolver-driver-did-ion.tests.csproj", "{C080E27E-F810-424E-864B-94FBF7AD55BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Debug|x64.Build.0 = Debug|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Debug|x86.Build.0 = Debug|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Release|x64.ActiveCfg = Release|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Release|x64.Build.0 = Release|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Release|x86.ActiveCfg = Release|Any CPU
+		{FF300B62-B19B-4090-A138-A0D391B08480}.Release|x86.Build.0 = Release|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Debug|x64.Build.0 = Debug|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Debug|x86.Build.0 = Debug|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Release|x64.ActiveCfg = Release|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Release|x64.Build.0 = Release|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Release|x86.ActiveCfg = Release|Any CPU
+		{C080E27E-F810-424E-864B-94FBF7AD55BE}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

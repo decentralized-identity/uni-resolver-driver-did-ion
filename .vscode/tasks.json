@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/uni-resolver-driver-ion.csproj",
+                "${workspaceFolder}/src/uni-resolver-driver-did-ion.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/uni-resolver-driver-ion.csproj",
+                "${workspaceFolder}/src/uni-resolver-driver-did-ion.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/uni-resolver-driver-ion.csproj",
+                "${workspaceFolder}/src/uni-resolver-driver-did-ion.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -45,14 +45,14 @@
                 "build"
             ],
             "dockerBuild": {
-                "tag": "uniresolverdriverion:dev",
+                "tag": "uniresolverdriverdidion:dev",
                 "target": "base",
                 "dockerfile": "${workspaceFolder}/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/uni-resolver-driver-ion.csproj"
+                "appProject": "${workspaceFolder}/src/uni-resolver-driver-did-ion.csproj"
             }
         },
         {
@@ -62,13 +62,13 @@
                 "build"
             ],
             "dockerBuild": {
-                "tag": "uniresolverdriverion:latest",
+                "tag": "uniresolverdriverdidion:latest",
                 "dockerfile": "${workspaceFolder}/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/uni-resolver-driver-ion.csproj"
+                "appProject": "${workspaceFolder}/src/uni-resolver-driver-did-ion.csproj"
             }
         },
         {
@@ -79,7 +79,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/uni-resolver-driver-ion.csproj",
+                "appProject": "${workspaceFolder}/src/uni-resolver-driver-did-ion.csproj",
                 "enableDebugging": true
             }
         },
@@ -91,7 +91,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/uni-resolver-driver-ion.csproj"
+                "appProject": "${workspaceFolder}/src/uni-resolver-driver-ion.csproj"
             }
         }
     ]

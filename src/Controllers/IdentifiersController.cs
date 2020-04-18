@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
-namespace uni_resolver_driver_ion.Controllers
+namespace IdentityOverlayNetwork.Controllers
 {
     /// <summary>
     /// Controller for exposing GET for resolving
