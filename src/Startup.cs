@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace uni_resolver_driver_ion
+namespace IdentityOverlayNetwork
 {
     /// <summary>
     /// Class for managing the start up of the application.

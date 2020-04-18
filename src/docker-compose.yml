@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  uniresolverdriverion:
-    image: uniresolverdriverion
+  uniresolverdriverdidion:
+    image: uniresolverdriverdidion
     build:
       context: .
       dockerfile: Dockerfile

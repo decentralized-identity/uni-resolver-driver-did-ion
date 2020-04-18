@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>IdentityOverlayNetwork.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.1.0" />
+    <PackageReference Include="Microsoft.CodeCoverage" Version="16.5.0" />
+    <PackageReference Include="ReportGenerator" Version="4.5.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\uni-resolver-driver-did-ion.csproj" />
+  </ItemGroup>
+
+</Project>

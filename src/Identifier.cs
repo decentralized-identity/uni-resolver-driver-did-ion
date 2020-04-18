@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace uni_resolver_driver_ion
+namespace IdentityOverlayNetwork
 {
     /// <summary>
     /// Class providing methods for validating and resolving
@@ -16,7 +16,7 @@ namespace uni_resolver_driver_ion
         /// Regular expression for matching DID methods supported
         /// by the driver.
         /// </summary>
-        public static readonly Regex SupportedMethods = new Regex("^did:(ion|sov):(\\S*)$", MatchOptions, TimeSpan.FromMilliseconds(100)); 
+        public static readonly Regex SupportedMethods = new Regex("^did:(ion):(\\S*)$", MatchOptions, TimeSpan.FromMilliseconds(100)); 
 
         /// <summary>
         /// Constant declaring options for
@@ -32,6 +32,12 @@ namespace uni_resolver_driver_ion
         /// <param name="identifier">The identifier to check.</param>
         /// <returns>True if <paramref name="identifier"> is supported, otherwise false.</returns>
         public static bool IsSupported(string identifier) {
+
+            // Only do work if passed an identifier
+            if (string.IsNullOrWhiteSpace(identifier)) {
+                return false;
+            }
+
             return SupportedMethods.IsMatch(identifier);
         }
 

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace uni_resolver_driver_ion
+namespace IdentityOverlayNetwork
 {
     /// <summary>
     /// Main class for the application.

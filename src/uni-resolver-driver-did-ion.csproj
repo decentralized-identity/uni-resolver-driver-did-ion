@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>uni_resolver_driver_ion</RootNamespace>
+    <RootNamespace>IdentityOverlayNetwork</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
