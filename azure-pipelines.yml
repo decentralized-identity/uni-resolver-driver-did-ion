@@ -27,3 +27,11 @@ steps:
     command: test
     projects: '**/tests/*.csproj'
     arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage"'
+
+- task: PublishCodeCoverageResults@1
+  condition: succeededOrFailed()
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '**/tests/TestResults/**/coverage.cobertura.xml'
+    reportDirectory: './coverage'
+    failIfCoverageEmpty: true
