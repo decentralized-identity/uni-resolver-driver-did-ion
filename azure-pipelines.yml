@@ -32,6 +32,5 @@ steps:
   condition: succeededOrFailed()
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: '**/tests/TestResults/**/coverage.cobertura.xml'
-    reportDirectory: './coverage'
+    summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.coberture.xml'
     failIfCoverageEmpty: true
