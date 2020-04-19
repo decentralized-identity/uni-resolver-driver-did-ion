@@ -14,15 +14,16 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: ".NET Core 3.1.x"
+  displayName: "Install .NET Core 3.1.x"
   inputs:
     version: '3.1.x'
     packageType: runtime
   
   # build all projects
 - script: dotnet build --configuration $(buildConfiguration)
+  displayName: "Build ION driver"
 - task: DotNetCoreCLI@2
-  displayName: "Unit Tests"
+  displayName: "Execute unit tests"
   inputs:
     command: test
     projects: '**/tests/*.csproj'
@@ -33,12 +34,13 @@ steps:
 - script: |
     dotnet tool install -g dotnet-reportgenerator-globaltool 
     reportgenerator -reports:$(Build.SourcesDirectory)/tests/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines;Cobertura
+  displayName: "Generate coverage report"
 
 # Publish the code coverage result (summary and web site)
 # The summary allows to view the coverage percentage in the summary tab
 # The web site allows to view which lines are covered directly in Azure Pipeline
 - task: PublishCodeCoverageResults@1
-  displayName: 'Publish code coverage'
+  displayName: 'Publish coverage report'
   inputs:
     codeCoverageTool: Cobertura
     summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml'
