@@ -18,6 +18,7 @@ steps:
   inputs:
     version: '3.1.x'
     packageType: runtime
+  
   # build all projects
   - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
