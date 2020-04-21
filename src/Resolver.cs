@@ -10,7 +10,7 @@ namespace IdentityOverlayNetwork
     /// Class providing methods for validating and resolving
     /// identifiers
     /// </summary>
-    public class Resolver
+    public class Resolver : IDisposable
     {
         /// <summary>
         /// Regular expression for matching DID methods supported
@@ -29,6 +29,11 @@ namespace IdentityOverlayNetwork
         /// resolution requests.
         /// </summary>
         private readonly Connection Connection;
+
+        /// <summary>
+        /// Has the object been disposed of?
+        /// </summary>
+        private bool disposed  = false;
 
         /// <summary>
         /// Uses the regular expression to check if 
@@ -96,5 +101,33 @@ namespace IdentityOverlayNetwork
 
             return jsonDocument;
         } 
+
+        /// <summary>
+        /// Dispose of the object
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Dispose of the connection object.
+        /// </summary>
+        /// <param name="disposing">True if the method is called from user code, false if called by finalizer.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed || !disposing)
+            {
+                return;
+            }
+
+            // Update the flag to indicate dispose
+            // has been called
+            this.disposed = true;
+              
+            // Despose of the response message
+            this.Connection.Dispose();
+        }
     }
 }

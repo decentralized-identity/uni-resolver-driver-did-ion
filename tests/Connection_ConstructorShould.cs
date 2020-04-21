@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace IdentityOverlayNetwork.Tests
 {
     /// <summary>
-    /// Tests the <see cref="Connection.Connection(HttpClient)" /> constructs
+    /// Tests the <see cref="Connection..ctor()" /> constructs
     /// the expected instance of the <see cref="Connection" /> class.
     /// </summary>
     [TestClass]

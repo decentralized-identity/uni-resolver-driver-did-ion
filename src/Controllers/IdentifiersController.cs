@@ -35,8 +35,9 @@ namespace IdentityOverlayNetwork.Controllers
 
             JObject document;
             try {
-                Resolver resolver = new Resolver();
-                document = await resolver.Resolve(identifier);
+                using (Resolver resolver = new Resolver()){
+                    document = await resolver.Resolve(identifier);
+                }
             }
             catch (ConnectionException connectionException) {
                 // Have defaulted to BadRequest, but more

@@ -37,7 +37,7 @@ public class MockHttpMessageHandler : HttpMessageHandler
     /// <param name="request">The <see cref="HttpRequestMessage" /> containing the request. Ignored.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken" /> containing the cancellation token. Ignored.</param>
     /// <returns></returns>
-    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         // Create the response message using the specified code
         HttpResponseMessage responseMessage = new HttpResponseMessage {
@@ -53,6 +53,6 @@ public class MockHttpMessageHandler : HttpMessageHandler
             responseMessage.ReasonPhrase = this.response;
         }
 
-        return responseMessage;
+        return Task.FromResult(responseMessage);
     }
 }
