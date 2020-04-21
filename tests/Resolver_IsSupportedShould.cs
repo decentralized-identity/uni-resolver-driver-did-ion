@@ -3,11 +3,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace IdentityOverlayNetwork.Tests
 {
     /// <summary>
-    /// Tests the <see cref="Identifier.IsSupported(string)" /> method
-    /// of the <see cref="Identifier" /> class.
+    /// Tests the <see cref="Resolver.IsSupported(string)" /> method
+    /// of the <see cref="Resolver" /> class.
     /// </summary>
     [TestClass]
-    public class Identifier_IsSupportedShould
+    public class Resolver_IsSupportedShould
     {
         /// <summary>
         /// Tests that false is returned by the method
@@ -16,9 +16,9 @@ namespace IdentityOverlayNetwork.Tests
         [TestMethod]
         public void IsSupported_InvalidInput_ReturnFalse()
         {
-            Assert.IsFalse(Identifier.IsSupported(string.Empty));
-            Assert.IsFalse(Identifier.IsSupported(null));
-            Assert.IsFalse(Identifier.IsSupported(""));
+            Assert.IsFalse(Resolver.IsSupported(string.Empty));
+            Assert.IsFalse(Resolver.IsSupported(null));
+            Assert.IsFalse(Resolver.IsSupported(""));
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace IdentityOverlayNetwork.Tests
         public void IsSupported_InputNotSupported_ReturnFalse()
         {
             const string NotSupported = "did:sov:WRfXPg8dantKVubE3HX8pw";
-            Assert.IsFalse(Identifier.IsSupported(NotSupported));
+            Assert.IsFalse(Resolver.IsSupported(NotSupported));
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace IdentityOverlayNetwork.Tests
         public void IsSupported_InputSupported_ReturnTrue()
         {
             const string Supported = "did:ion:WRfXPg8dantKVubE3HX8pw";
-            Assert.IsTrue(Identifier.IsSupported(Supported));
+            Assert.IsTrue(Resolver.IsSupported(Supported));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace IdentityOverlayNetwork.Tests
                                      "pTENKMGVYQmxJam9pYzI5dFpWUjVjR1VpTENKelpYSjJhV05sUlc1a2NHOXBiblFpT2lKb2RIUndje" + 
                                      "m92TDNkM2R5NTFjbXd1WTI5dEluMWRmWDFkZlEifQ";
 
-            Assert.IsTrue(Identifier.IsSupported(Supported));
+            Assert.IsTrue(Resolver.IsSupported(Supported));
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace IdentityOverlayNetwork.Tests
         public void IsSupported_TestInputSupported_ReturnTrue()
         {
             const string Supported = "did:ion:test:WRfXPg8dantKVubE3HX8pw?";
-            Assert.IsTrue(Identifier.IsSupported(Supported));
+            Assert.IsTrue(Resolver.IsSupported(Supported));
         }
     }
 }
