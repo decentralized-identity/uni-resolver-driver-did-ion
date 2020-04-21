@@ -10,7 +10,7 @@ namespace IdentityOverlayNetwork
     /// Class providing methods for validating and resolving
     /// identifiers
     /// </summary>
-    public static class Identifier
+    public class Resolver
     {
         /// <summary>
         /// Regular expression for matching DID methods supported
@@ -25,6 +25,12 @@ namespace IdentityOverlayNetwork
         private const RegexOptions MatchOptions = RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline;
 
         /// <summary>
+        /// Instance of the <see cref="Connection" /> for making the
+        /// resolution requests.
+        /// </summary>
+        private readonly Connection Connection;
+
+        /// <summary>
         /// Uses the regular expression to check if 
         /// <paramref name="identifier"> is a supported
         /// method.
@@ -34,11 +40,29 @@ namespace IdentityOverlayNetwork
         public static bool IsSupported(string identifier) {
 
             // Only do work if passed an identifier
-            if (string.IsNullOrWhiteSpace(identifier)) {
+            if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrEmpty(identifier)) {
                 return false;
             }
 
             return SupportedMethods.IsMatch(identifier);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Resolver" /> class.
+        /// </summary>
+        public Resolver() {
+            // Use the static application connection
+            this.Connection = Program.Connection;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Resolver" /> class.
+        /// </summary>
+        /// <param name="connection">The <see cref="Connection" /> to initialize the instance with.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="connection"> is null.</exception>
+        public Resolver(Connection connection) {
+            // Set the private instance
+            this.Connection = connection.IsNull("connection");
         }
 
         /// <summary>
@@ -48,42 +72,25 @@ namespace IdentityOverlayNetwork
         /// </summary>
         /// <param name="identifier">The identifier to resolve.</param>
         /// <returns>A string containing the resolved identifier document.</returns>
-        public static async Task<JObject> Resolve(string identifier) {
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="argument"> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="argument"> is empty or is whitespace.</exception>
+        public async Task<JObject> Resolve(string identifier) {
             
-            if (String.IsNullOrWhiteSpace(identifier)) {
-                throw new ArgumentNullException("identifier");
-            }
+            // Check the argument
+            identifier = identifier.IsPopulated("identifier");
 
             // Define your base url //TODO configurable
-            string baseURL = $"https://beta.discover.did.microsoft.com/1.0/identifiers/{identifier}";
+            string discoveryUri = $"https://beta.discover.did.microsoft.com/1.0/identifiers/{identifier}";
 
             JObject jsonDocument = null;
 
-            // Create an http client, wrap in using to
-            // ensure clean up
-            using (HttpClient httpClient = new HttpClient())
+            using (HttpContent httpContent = await this.Connection.GetAsync(discoveryUri))
             {
-                // Set the timeout //TODO configurable
-                httpClient.Timeout = TimeSpan.FromSeconds(10);
+                // Read the document from the content
+                string document = await httpContent.ReadAsStringAsync();
 
-                // Await the response from the request
-                using (HttpResponseMessage responseMessage = await httpClient.GetAsync(baseURL))
-                {
-                    // Check if we have got an OK back, if not
-                    // throw
-                    if (!responseMessage.IsSuccessStatusCode) {
-                        throw new HttpRequestException(responseMessage.ReasonPhrase);
-                    }
-
-                    using (HttpContent httpContent = responseMessage.Content)
-                    {
-                        // Read the document from the content
-                        string document = await httpContent.ReadAsStringAsync();
-
-                        if (!string.IsNullOrWhiteSpace(document)) {
-                            jsonDocument = JObject.Parse(document);
-                        }
-                    }
+                if (!string.IsNullOrWhiteSpace(document)) {
+                    jsonDocument = JObject.Parse(document);
                 }
             }
 
