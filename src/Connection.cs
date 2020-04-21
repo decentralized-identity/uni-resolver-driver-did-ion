@@ -8,7 +8,7 @@ namespace IdentityOverlayNetwork
     /// Connection class for fetching data from
     /// remote servers.
     /// </summary>
-    public class Connection
+    public class Connection : IDisposable
     {
         /// <summary>
         /// Constant int holding the default connection timeout
@@ -20,6 +20,17 @@ namespace IdentityOverlayNetwork
         /// Private instance of the <see cref="HttpClient" /> 
         /// </summary>
         private readonly HttpClient httpClient;
+
+        /// <summary>
+        /// Has the object been disposed of?
+        /// </summary>
+        private bool disposed  = false;
+
+        /// <summary>
+        /// Intance of <see cref="HttpResponseMessage" /> for
+        /// the current connection.
+        /// </summary>
+        private HttpResponseMessage responseMessage;
 
         /// <summary>
         /// Gets a value for the time connection timeout.
@@ -94,16 +105,43 @@ namespace IdentityOverlayNetwork
             requestUri = requestUri.IsPopulated("requestUri");
 
             // Await the response from the request
-            using (HttpResponseMessage responseMessage = await this.httpClient.GetAsync(requestUri))
-            {
-                // Check if we have got an OK back, if not
-                // throw passing up the reason.
-                if (!responseMessage.IsSuccessStatusCode) {
-                    throw new ConnectionException(responseMessage.StatusCode, responseMessage.ReasonPhrase);
-                }
-
-                return responseMessage.Content;
+            this.responseMessage = await this.httpClient.GetAsync(requestUri);
+            
+            // Check if we have got an OK back, if not
+            // throw passing up the reason.
+            if (!responseMessage.IsSuccessStatusCode) {
+                throw new ConnectionException(responseMessage.StatusCode, responseMessage.ReasonPhrase);
             }
+
+            return this.responseMessage.Content;
+        }
+
+        /// <summary>
+        /// Dispose of the object
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Dispose of the connection object.
+        /// </summary>
+        /// <param name="disposing">True if the method is called from user code, false if called by finalizer.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed || !disposing)
+            {
+                return;
+            }
+
+            // Update the flag to indicate dispose
+            // has been called
+            this.disposed = true;
+              
+            // Despose of the response message
+            this.responseMessage.Dispose();
         }
 
         /// <summary>

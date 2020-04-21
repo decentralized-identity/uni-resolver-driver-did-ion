@@ -1,7 +1,9 @@
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace IdentityOverlayNetwork.Tests
 {
@@ -32,16 +34,16 @@ namespace IdentityOverlayNetwork.Tests
         /// Tests that a populated <see cref="JObject" /> is returned.
         /// </summary>
         [TestMethod]
-        public async void Resolve_ValidRequestUri_ReturnsJObject()
+        public async Task Resolve_ValidRequestUri_ReturnsJObject()
         {
-            string responseContent = "{ \"document\": {} }";
+            string responseContent = "{\"document\":{}}";
 
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, responseContent);
             Connection connection = new Connection(mockHttpMessageHandler);
             Resolver resolver = new Resolver(connection);
 
             JObject json = await resolver.Resolve("did:ion:test");
-            Assert.Equals(json.ToString(), responseContent);
+            Assert.AreEqual(json.ToString(Formatting.None), responseContent);
         }
     }
 }

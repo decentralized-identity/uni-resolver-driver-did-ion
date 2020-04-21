@@ -43,5 +43,15 @@ namespace IdentityOverlayNetwork.Tests
             string input = string.Empty;
             Assert.ThrowsException<ArgumentException>(() => input.IsPopulated("input"));
         }
+
+        /// <summary>
+        /// Tests that the argument is returned when valid.
+        /// </summary>
+        [TestMethod]
+        public void IsPopulated_ValidInput_ReturnsArugumernt()
+        {
+            string input = "valid_input";
+            Assert.AreEqual(input, input.IsPopulated("input"));
+        }
     }
 }
