@@ -40,7 +40,7 @@ namespace IdentityOverlayNetwork
         public static bool IsSupported(string identifier) {
 
             // Only do work if passed an identifier
-            if (string.IsNullOrWhiteSpace(identifier)) {
+            if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrEmpty(identifier)) {
                 return false;
             }
 
@@ -59,13 +59,10 @@ namespace IdentityOverlayNetwork
         /// Initializes a new instance of the <see cref="Resolver" /> class.
         /// </summary>
         /// <param name="connection">The <see cref="Connection" /> to initialize the instance with.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="connection"> is null.</exception>
         public Resolver(Connection connection) {
-            if (connection == null) {
-                throw new ArgumentNullException("connection");
-            }
-
             // Set the private instance
-            this.Connection = connection;
+            this.Connection = connection.IsNull("connection");
         }
 
         /// <summary>
@@ -75,18 +72,19 @@ namespace IdentityOverlayNetwork
         /// </summary>
         /// <param name="identifier">The identifier to resolve.</param>
         /// <returns>A string containing the resolved identifier document.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="argument"> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="argument"> is empty or is whitespace.</exception>
         public async Task<JObject> Resolve(string identifier) {
             
-            if (String.IsNullOrWhiteSpace(identifier)) {
-                throw new ArgumentNullException("identifier");
-            }
+            // Check the argument
+            identifier = identifier.IsPopulated("identifier");
 
             // Define your base url //TODO configurable
-            string baseURL = $"https://beta.discover.did.microsoft.com/1.0/identifiers/{identifier}";
+            string discoveryUri = $"https://beta.discover.did.microsoft.com/1.0/identifiers/{identifier}";
 
             JObject jsonDocument = null;
 
-            using (HttpContent httpContent = await this.Connection.GetAsync(baseURL))
+            using (HttpContent httpContent = await this.Connection.GetAsync(discoveryUri))
             {
                 // Read the document from the content
                 string document = await httpContent.ReadAsStringAsync();

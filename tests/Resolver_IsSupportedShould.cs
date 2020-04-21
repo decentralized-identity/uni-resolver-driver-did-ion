@@ -18,7 +18,7 @@ namespace IdentityOverlayNetwork.Tests
         {
             Assert.IsFalse(Resolver.IsSupported(string.Empty));
             Assert.IsFalse(Resolver.IsSupported(null));
-            Assert.IsFalse(Resolver.IsSupported(""));
+            Assert.IsFalse(Resolver.IsSupported(" ")); //Whitespace
         }
 
         /// <summary>
