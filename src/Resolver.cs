@@ -42,10 +42,12 @@ namespace IdentityOverlayNetwork
         /// </summary>
         /// <param name="identifier">The identifier to check.</param>
         /// <returns>True if <paramref name="identifier"> is supported, otherwise false.</returns>
-        public static bool IsSupported(string identifier) {
+        public static bool IsSupported(string identifier) 
+        {
 
             // Only do work if passed an identifier
-            if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrEmpty(identifier)) {
+            if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrEmpty(identifier)) 
+            {
                 return false;
             }
 
@@ -57,7 +59,8 @@ namespace IdentityOverlayNetwork
         /// </summary>
         /// <param name="connection">The <see cref="Connection" /> to initialize the instance with.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="connection"> is null.</exception>
-        public Resolver(Connection connection) {
+        public Resolver(Connection connection) 
+        {
             // Set the private instance
             this.Connection = connection.IsNull("connection");
         }
@@ -71,7 +74,8 @@ namespace IdentityOverlayNetwork
         /// <returns>A string containing the resolved identifier document.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="argument"> is null.</exception>
         /// <exception cref="ArgumentException">Thrown when <paramref name="argument"> is empty or is whitespace.</exception>
-        public async Task<JObject> Resolve(string identifier) {
+        public async Task<JObject> Resolve(string identifier) 
+        {
             
             // Check the argument
             identifier = identifier.IsPopulated("identifier");
@@ -80,13 +84,13 @@ namespace IdentityOverlayNetwork
             string discoveryUri = $"https://beta.discover.did.microsoft.com/1.0/identifiers/{identifier}";
             
             JObject jsonDocument = null;
-
             using (HttpContent httpContent = await this.Connection.GetAsync(discoveryUri))
             {
                 // Read the document from the content
                 string document = await httpContent.ReadAsStringAsync();
 
-                if (!string.IsNullOrWhiteSpace(document)) {
+                if (!string.IsNullOrWhiteSpace(document)) 
+                {
                     jsonDocument = JObject.Parse(document);
                 }
             }
@@ -119,7 +123,8 @@ namespace IdentityOverlayNetwork
             this.disposed = true;
               
             // Despose of the connection
-            if (this.Connection != null) {
+            if (this.Connection != null) 
+            {
                 this.Connection.Dispose();
             }
         }

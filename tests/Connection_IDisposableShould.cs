@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Net.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IdentityOverlayNetwork.Tests
@@ -12,8 +13,8 @@ namespace IdentityOverlayNetwork.Tests
     public class Connection_IDisposableShould
     {
         /// <summary>
-        /// Verifies that <see cref="ArgumentNullException" /> is thrown
-        /// on invalid input.
+        /// Verifies that Dispose executes without
+        /// exception
         /// </summary>
         [TestMethod]
         public void Dispose_ExecutesWithoutException()
@@ -21,6 +22,7 @@ namespace IdentityOverlayNetwork.Tests
             try
             {
                 Connection connection = new Connection(new MockHttpMessageHandler(HttpStatusCode.OK, string.Empty));
+                HttpContent content = connection.GetAsync("https://testuri").Result; // Call GetAsync so that local response message is populated
                 Assert.IsNotNull(connection);
                 connection.Dispose();
                 connection.Dispose(); // Multiple calls to dispose shouldn't error as flag should be set

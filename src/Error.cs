@@ -27,6 +27,12 @@ namespace IdentityOverlayNetwork
             /// was specified in the request.
             /// </summary>
             public const string UnsupportedDidMethod = "unsupported_did_method";
+
+            /// <summary>
+            /// Code indicating that an error has been
+            /// returned by the remote service.
+            /// </summary>
+            public const string RemoteServiceError = "remote_service_error";
         }
 
         /// <summary>
