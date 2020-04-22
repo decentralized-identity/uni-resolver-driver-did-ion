@@ -3,6 +3,8 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 
 namespace IdentityOverlayNetwork.Controllers
@@ -33,7 +35,8 @@ namespace IdentityOverlayNetwork.Controllers
         /// </summary>
         /// <param name="connection">The <see cref="Connection" /> to initialize the instance with. Injecteed from service context when being called from servvice.null</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="connection"> is null.</exception>
-        public IdentifiersController([FromServices] Connection connection) {
+        public IdentifiersController([FromServices] Connection connection) 
+        {
             // Set the private instance
             this.connection = connection.IsNull("connection");
         }
@@ -52,7 +55,8 @@ namespace IdentityOverlayNetwork.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(string identifier)
         {   
-            if (!Resolver.IsSupported(identifier)){
+            if (!Resolver.IsSupported(identifier))
+            {
                 
                 Error unsupportedIdentifier = new Error
                 {
@@ -66,21 +70,36 @@ namespace IdentityOverlayNetwork.Controllers
             }
 
             JObject document;
-            try {
-                using (Resolver resolver = new Resolver(this.connection)){
+            try 
+            {
+                using (Resolver resolver = new Resolver(this.connection))
+                {
                     document = await resolver.Resolve(this.PrepareIdentifier(identifier));
                 }
             }
-            catch (ConnectionException connectionException) {
-                // Have defaulted to BadRequest, but more
-                // cases can be added to return specific
-                // responses if needed.
-                switch (connectionException.StatusCode) {
-                    case HttpStatusCode.NotFound:
-                        return NotFound();
-                    default:
-                        return BadRequest();
+            catch (ConnectionException connectionException) 
+            {
+                // If we get a 404, just return a vanilla
+                // not found
+                if (connectionException.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return NotFound();
                 }
+
+                // For exceptions that are not 404,
+                // wrap in an error and return
+                Error connectionError = new Error
+                {
+                    Message = connectionException.ReasonPhrase,
+                    Type = Error.Types.RequestResolveIdentifier,
+                    Code = Error.Codes.RemoteServiceError,
+                    CorrelationId = this.GetCorrelationId(),
+                };
+
+                return new ObjectResult(connectionError)
+                {
+                    StatusCode = (int)connectionException.StatusCode
+                }; 
             }
             
             return Json(document);
@@ -93,15 +112,16 @@ namespace IdentityOverlayNetwork.Controllers
         /// </summary>
         /// <param name="identifier">The identifier to which to add the state.</param>
         /// <returns>A string containing the identifier with state appended if exists in the request.</returns>
-        public string PrepareIdentifier(string identifier){
+        public string PrepareIdentifier(string identifier)
+        {
             identifier = identifier.IsPopulated("identifier");
 
             // Check if ION inital state included in the
             // query. If so ensure that we include in
             // the resolve.
-            string initialState = Request.Query[IdentifiersController.IonInitialStateKey];
-
-            if (!string.IsNullOrEmpty(initialState) && !string.IsNullOrWhiteSpace(initialState)) {
+            StringValues initialState = string.Empty;
+            if (Request != null && Request.Query.TryGetValue(IdentifiersController.IonInitialStateKey, out initialState)) 
+            {
                 identifier = $"{identifier}?{IdentifiersController.IonInitialStateKey}={initialState}";
             }
 
@@ -113,7 +133,8 @@ namespace IdentityOverlayNetwork.Controllers
         /// uses the TraceIdentifier from that otherwise returns a <see cref="Guid" />
         /// </summary>
         /// <returns>A string conatning the correlation id.</returns>
-        private string GetCorrelationId() {
+        private string GetCorrelationId() 
+        {
             return (HttpContext != null && !string.IsNullOrWhiteSpace(HttpContext.TraceIdentifier)) ? HttpContext.TraceIdentifier : Guid.NewGuid().ToString();
         }
     }
