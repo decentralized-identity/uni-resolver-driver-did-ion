@@ -140,8 +140,11 @@ namespace IdentityOverlayNetwork
             // has been called
             this.disposed = true;
               
-            // Despose of the response message
-            this.responseMessage.Dispose();
+            // Despose of the response message if
+            // not already disposed
+            if (this.responseMessage != null ) {
+                this.responseMessage.Dispose();
+            }
         }
 
         /// <summary>
