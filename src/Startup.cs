@@ -1,3 +1,5 @@
+using System;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,8 +35,9 @@ namespace IdentityOverlayNetwork
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddControllers()
-                .AddNewtonsoftJson(); // Use the Newtownsoft JSON until .net core 3.2 lands.
+                    .AddSingleton(typeof(Connection), new Connection(new HttpClient()))
+                    .AddControllers()
+                    .AddNewtonsoftJson();
         }
 
         /// <summary>

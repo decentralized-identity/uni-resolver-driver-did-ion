@@ -1,18 +1,17 @@
 using System;
-using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IdentityOverlayNetwork.Tests
 {
     /// <summary>
-    /// Tests the <see cref="ArgumentExtensions.IsPopulated(string, string)" /> method
+    /// Verifies the <see cref="ArgumentExtensions.IsPopulated(string, string)" /> method
     /// of the <see cref="ArgumentExtensions" /> class.
     /// </summary>
     [TestClass]
     public class ArgumentExtensions_IsPopulatedShould
     {
         /// <summary>
-        /// Tests that <see cref="ArgumentNullException" /> is thrown
+        /// Verifies that <see cref="ArgumentNullException" /> is thrown
         /// on null input.
         /// </summary>
         [TestMethod]
@@ -23,7 +22,7 @@ namespace IdentityOverlayNetwork.Tests
         }
 
         /// <summary>
-        /// Tests that <see cref="ArgumentException" /> is thrown
+        /// Verifies that <see cref="ArgumentException" /> is thrown
         /// on null input.
         /// </summary>
         [TestMethod]
@@ -34,7 +33,7 @@ namespace IdentityOverlayNetwork.Tests
         }
 
         /// <summary>
-        /// Tests that <see cref="ArgumentException" /> is thrown
+        /// Verifies that <see cref="ArgumentException" /> is thrown
         /// on null input.
         /// </summary>
         [TestMethod]
@@ -45,7 +44,7 @@ namespace IdentityOverlayNetwork.Tests
         }
 
         /// <summary>
-        /// Tests that the argument is returned when valid.
+        /// Verifies that the argument is returned when valid.
         /// </summary>
         [TestMethod]
         public void IsPopulated_ValidInput_ReturnsArugumernt()

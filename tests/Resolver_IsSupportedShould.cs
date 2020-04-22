@@ -3,14 +3,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace IdentityOverlayNetwork.Tests
 {
     /// <summary>
-    /// Tests the <see cref="Resolver.IsSupported(string)" /> method
+    /// Verifies the <see cref="Resolver.IsSupported(string)" /> method
     /// of the <see cref="Resolver" /> class.
     /// </summary>
     [TestClass]
     public class Resolver_IsSupportedShould
     {
         /// <summary>
-        /// Tests that false is returned by the method
+        /// Verifies that false is returned by the method
         /// when a non supported identifier is passed.
         /// </summary>
         [TestMethod]
@@ -22,7 +22,7 @@ namespace IdentityOverlayNetwork.Tests
         }
 
         /// <summary>
-        /// Tests that false is returned by the method
+        /// Verifies that false is returned by the method
         /// when a non supported identifier is passed.
         /// </summary>
         [TestMethod]
@@ -33,7 +33,7 @@ namespace IdentityOverlayNetwork.Tests
         }
 
         /// <summary>
-        /// Tests that true is returned by the method
+        /// Verifies that true is returned by the method
         /// when an ION identifier is passed.
         /// </summary>
         [TestMethod]
@@ -44,7 +44,7 @@ namespace IdentityOverlayNetwork.Tests
         }
 
         /// <summary>
-        /// Tests that true is returned by the method
+        /// Verifies that true is returned by the method
         /// when a self-resolving ION identifier is passed.
         /// </summary>
         [TestMethod]
@@ -74,7 +74,7 @@ namespace IdentityOverlayNetwork.Tests
         }
 
         /// <summary>
-        /// Tests that true is returned by the method
+        /// Verifies that true is returned by the method
         /// when a test ION identifier is passed.
         /// </summary>
         [TestMethod]

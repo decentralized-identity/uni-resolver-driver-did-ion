@@ -4,14 +4,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace IdentityOverlayNetwork.Tests
 {
     /// <summary>
-    /// Tests the <see cref="ConnectionException(statusCode, reasonPhrase)" /> constructs
+    /// Verifies the <see cref="ConnectionException(statusCode, reasonPhrase)" /> constructs
     /// the expected instance of the <see cref="ConnectionException" /> class.
     /// </summary>
     [TestClass]
     public class ConnectionException_ConstructorShould
     {
         /// <summary>
-        /// Instance should be created with default timeout.
+        /// Verifies instance should be created with default timeout.
         /// </summary>
         [TestMethod]
         public void Constructor_ReturnsInstance()

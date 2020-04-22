@@ -55,14 +55,6 @@ namespace IdentityOverlayNetwork
         /// <summary>
         /// Initializes a new instance of the <see cref="Resolver" /> class.
         /// </summary>
-        public Resolver() {
-            // Use the static application connection
-            this.Connection = Program.Connection;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Resolver" /> class.
-        /// </summary>
         /// <param name="connection">The <see cref="Connection" /> to initialize the instance with.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="connection"> is null.</exception>
         public Resolver(Connection connection) {
@@ -86,7 +78,7 @@ namespace IdentityOverlayNetwork
 
             // Define your base url //TODO configurable
             string discoveryUri = $"https://beta.discover.did.microsoft.com/1.0/identifiers/{identifier}";
-
+            
             JObject jsonDocument = null;
 
             using (HttpContent httpContent = await this.Connection.GetAsync(discoveryUri))
@@ -126,8 +118,10 @@ namespace IdentityOverlayNetwork
             // has been called
             this.disposed = true;
               
-            // Despose of the response message
-            this.Connection.Dispose();
+            // Despose of the connection
+            if (this.Connection != null) {
+                this.Connection.Dispose();
+            }
         }
     }
 }

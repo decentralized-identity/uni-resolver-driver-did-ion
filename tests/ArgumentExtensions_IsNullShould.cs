@@ -4,14 +4,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace IdentityOverlayNetwork.Tests
 {
     /// <summary>
-    /// Tests the <see cref="ArgumentExtensions.IsNull{T}(T, string)" /> method
+    /// Verifies the <see cref="ArgumentExtensions.IsNull{T}(T, string)" /> method
     /// of the <see cref="ArgumentExtensions" /> class.
     /// </summary>
     [TestClass]
     public class ArgumentExtensions_IsNullShould
     {
         /// <summary>
-        /// Tests that <see cref="ArgumentNullException" /> is thrown
+        /// Verifies that <see cref="ArgumentNullException" /> is thrown
         /// on null input.
         /// </summary>
         [TestMethod]

@@ -6,14 +6,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace IdentityOverlayNetwork.Tests
 {
     /// <summary>
-    /// Tests the <see cref="Connection..ctor()" /> constructs
+    /// Verifies the <see cref="Connection..ctor()" /> constructs
     /// the expected instance of the <see cref="Connection" /> class.
     /// </summary>
     [TestClass]
     public class Connection_ConstructorShould
     {
         /// <summary>
-        /// Tests that <see cref="ArgumentNullException" /> is thrown
+        /// Verifies that <see cref="ArgumentNullException" /> is thrown
         /// on invalid input.
         /// </summary>
         [TestMethod]
@@ -34,7 +34,7 @@ namespace IdentityOverlayNetwork.Tests
             Assert.AreEqual(Connection.DefaultTimeoutInMilliseconds, connection.TimeoutInMilliseconds);
         }
 
-         /// <summary>
+        /// <summary>
         /// Instance should be created with the specified timeout.
         /// </summary>
         [TestMethod]
@@ -46,7 +46,7 @@ namespace IdentityOverlayNetwork.Tests
             Assert.AreEqual(5000, connection.TimeoutInMilliseconds);
         }
 
-                /// <summary>
+        /// <summary>
         /// Instance should be created with default timeout.
         /// </summary>
         [TestMethod]
@@ -58,7 +58,7 @@ namespace IdentityOverlayNetwork.Tests
             Assert.AreEqual(Connection.DefaultTimeoutInMilliseconds, connection.TimeoutInMilliseconds);
         }
 
-         /// <summary>
+        /// <summary>
         /// Instance should be created with the specified timeout.
         /// </summary>
         [TestMethod]

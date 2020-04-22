@@ -4,14 +4,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace IdentityOverlayNetwork.Tests
 {
     /// <summary>
-    /// Tests the <see cref="ArgumentExtensions.IsDefault{T}(T)" /> method
+    /// Verifies the <see cref="ArgumentExtensions.IsDefault{T}(T)" /> method
     /// of the <see cref="ArgumentExtensions" /> class.
     /// </summary>
     [TestClass]
     public class ArgumentExtensions_IsDefaultShould
     {
         /// <summary>
-        /// Tests that true is returned when then
+        /// Verifies that true is returned when then
         /// input is the type default.
         /// </summary>
         [TestMethod]
@@ -22,7 +22,7 @@ namespace IdentityOverlayNetwork.Tests
         }
 
         /// <summary>
-        /// Tests that false is returned when then
+        /// Verifies that false is returned when then
         /// input is not the type default.
         /// </summary>
         [TestMethod]
