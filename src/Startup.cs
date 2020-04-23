@@ -1,5 +1,5 @@
 using System;
-using System.Net.Http;
+using IdentityOverlayNetwork.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,9 +35,11 @@ namespace IdentityOverlayNetwork
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                    .AddSingleton(typeof(Connection), new Connection(new HttpClient()))
-                    .AddControllers()
-                    .AddNewtonsoftJson();
+                .AddControllers()
+                .AddNewtonsoftJson();
+
+            // Add the http clients
+            this.ConfigureHttpClients(services);
         }
 
         /// <summary>
@@ -59,6 +61,48 @@ namespace IdentityOverlayNetwork
                 {
                     endpoints.MapControllers();
                 });
+        }
+
+        /// <summary>
+        /// Processes the driver configuration section of 
+        /// the app settings, adding each node as an
+        /// HttpClient. 
+        /// <param name="services">The <see cref="IServiceCollection" /> which to configure.</param>
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="services"/> is null.</exception>
+        /// <exception cref="StartupException">Throw when the appsettings.json does not include a driver configuration section.</exception>
+        /// <exception cref="StartupException">Throw when the appsettings.json driver configuration section does not include any nodes.</exception>
+        public void ConfigureHttpClients(IServiceCollection services)
+        {
+            services.IsNull("services");
+
+            // Get the driver configuration
+            DriverConfiguration driverConfiguration = new DriverConfiguration();
+            Configuration.GetSection("DriverConfiguration").Bind(driverConfiguration);
+
+            // Check driver configuration is specified
+            if (driverConfiguration == null)
+            {
+                throw new StartupException("'appsettings.json' does not specify a DriverConfiguration section.");
+            }
+
+            // Check nodes are specified
+            if (driverConfiguration.Nodes == null || driverConfiguration.Nodes.Length == 0)
+            {
+                throw new StartupException("'appsettings.json' DriverConfiguration section does not specify any nodes.");
+            }
+
+            // For each node, add an HttpClient to the services
+            foreach(Node node in driverConfiguration.Nodes)
+            {
+                // Add the Microsoft discovery service http client
+                services
+                    .AddHttpClient(node.Name.IsPopulated("node.name"), client => 
+                    {
+                        client.BaseAddress = node.Uri;
+                        client.DefaultRequestHeaders.Add("Accept", "application/json");
+                    });
+            }
         }
     }
 }

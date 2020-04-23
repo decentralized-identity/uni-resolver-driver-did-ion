@@ -28,7 +28,7 @@ namespace IdentityOverlayNetwork
         /// Instance of the <see cref="Connection" /> for making the
         /// resolution requests.
         /// </summary>
-        private readonly Connection Connection;
+        private readonly Connection connection;
 
         /// <summary>
         /// Has the object been disposed of?
@@ -44,7 +44,6 @@ namespace IdentityOverlayNetwork
         /// <returns>True if <paramref name="identifier"> is supported, otherwise false.</returns>
         public static bool IsSupported(string identifier) 
         {
-
             // Only do work if passed an identifier
             if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrEmpty(identifier)) 
             {
@@ -62,7 +61,7 @@ namespace IdentityOverlayNetwork
         public Resolver(Connection connection) 
         {
             // Set the private instance
-            this.Connection = connection.IsNull("connection");
+            this.connection = connection.IsNull("connection");
         }
 
         /// <summary>
@@ -81,10 +80,10 @@ namespace IdentityOverlayNetwork
             identifier = identifier.IsPopulated("identifier");
 
             // Define your base url //TODO configurable
-            string discoveryUri = $"https://beta.discover.did.microsoft.com/1.0/identifiers/{identifier}";
-            
+            // string discoveryUri = $"https://beta.discover.did.microsoft.com/1.0/identifiers/{identifier}";
+       
             JObject jsonDocument = null;
-            using (HttpContent httpContent = await this.Connection.GetAsync(discoveryUri))
+            using (HttpContent httpContent = await this.connection.GetAsync(identifier))
             {
                 // Read the document from the content
                 string document = await httpContent.ReadAsStringAsync();
@@ -123,9 +122,9 @@ namespace IdentityOverlayNetwork
             this.disposed = true;
               
             // Despose of the connection
-            if (this.Connection != null) 
+            if (this.connection != null) 
             {
-                this.Connection.Dispose();
+                this.connection.Dispose();
             }
         }
     }

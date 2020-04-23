@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,12 +34,13 @@ namespace IdentityOverlayNetwork.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="Resolver" /> class.
         /// </summary>
-        /// <param name="connection">The <see cref="Connection" /> to initialize the instance with. Injecteed from service context when being called from servvice.null</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="connection"> is null.</exception>
-        public IdentifiersController([FromServices] Connection connection) 
+        /// <param name="httpClientFactory">The <see cref="IHttpClientFactory" /> to initialize the instance with. Injecteed from service context when being called from servvice.null</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="httpClientFactory"> is null.</exception>
+        //public IdentifiersController([FromServices] Connection connection) 
+        public IdentifiersController([FromServices] IHttpClientFactory httpClientFactory)
         {
             // Set the private instance
-            this.connection = connection.IsNull("connection");
+            this.connection = new Connection(httpClientFactory.IsNull("connection"));
         }
 
         /// <summary>
