@@ -1,0 +1,28 @@
+{
+  "DriverConfiguration": {
+    "Resilience": {
+      "EnableRetry": true,
+      "EnableCircuitBreaking": true
+    },
+    "Consensus": {
+      "Model": "FirstWins",
+      "InAgreement": "1"
+    },
+    "Nodes": [
+      {
+        "Name": "beta.discover.microsoft",
+        "Uri": "https://beta.discover.did.microsoft.com/1.0/identifiers/",
+        "TimeoutInMilliseconds": "5000",
+        "Selection": "Always",
+        "AllowCaching": true
+      },
+      {
+        "Name": "test.direct.ion",
+        "Uri": "http://10.91.6.163:3000/",
+        "TimeoutInMilliseconds": "10000",
+        "Selection": "Random",
+        "AllowCaching": true
+      }
+    ]
+  }
+}

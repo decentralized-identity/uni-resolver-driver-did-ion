@@ -26,8 +26,8 @@ namespace IdentityOverlayNetwork.Tests
             const string BadRequestMessage = "The specified DID method is not supported. Only ION (https://github.com/decentralized-identity/ion) based identifiers can be resolved.";
 
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, "test_content");
-            Connection connection = new Connection(mockHttpMessageHandler);
-            IdentifiersController identifiersController = new IdentifiersController(connection);
+            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+            IdentifiersController identifiersController = new IdentifiersController(mockHttpClientFactory);
 
             BadRequestObjectResult badRequestResult = identifiersController.Get("did:notsupported").Result as BadRequestObjectResult;
 
@@ -57,8 +57,8 @@ namespace IdentityOverlayNetwork.Tests
         public void Get_ConnectionReturns404_Returns404NotFound()
         {
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.NotFound, "test_content");
-            Connection connection = new Connection(mockHttpMessageHandler);
-            IdentifiersController identifiersController = new IdentifiersController(connection);
+            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+            IdentifiersController identifiersController = new IdentifiersController(mockHttpClientFactory);
 
             NotFoundResult notFoundResult = identifiersController.Get("did:ion:test").Result as NotFoundResult;
 
@@ -77,8 +77,8 @@ namespace IdentityOverlayNetwork.Tests
         public void Get_ConnectionErrors_Returns400BadRequest()
         {
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.BadRequest, "test_reasonPhrase");
-            Connection connection = new Connection(mockHttpMessageHandler);
-            IdentifiersController identifiersController = new IdentifiersController(connection);
+            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+            IdentifiersController identifiersController = new IdentifiersController(mockHttpClientFactory);
 
             ObjectResult objectResult = identifiersController.Get("did:ion:test").Result as ObjectResult;
 
@@ -109,8 +109,8 @@ namespace IdentityOverlayNetwork.Tests
         public void Get_ConnectionErrors_Returns502BadGateway()
         {
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.BadGateway, "test_reasonPhrase");
-            Connection connection = new Connection(mockHttpMessageHandler);
-            IdentifiersController identifiersController = new IdentifiersController(connection);
+            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+            IdentifiersController identifiersController = new IdentifiersController(mockHttpClientFactory);
 
             ObjectResult objectResult = identifiersController.Get("did:ion:test").Result as ObjectResult;
 
@@ -141,8 +141,8 @@ namespace IdentityOverlayNetwork.Tests
         {
             string responseContent = "{\"document\":{}}";
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, responseContent);
-            Connection connection = new Connection(mockHttpMessageHandler);
-            IdentifiersController identifiersController = new IdentifiersController(connection);
+            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+            IdentifiersController identifiersController = new IdentifiersController(mockHttpClientFactory);
 
             JsonResult jsonResult = identifiersController.Get("did:ion:test").Result as JsonResult;
 

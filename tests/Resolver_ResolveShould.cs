@@ -21,7 +21,8 @@ namespace IdentityOverlayNetwork.Tests
         public void Resolve_InvalidInput_ThrowsArgumentNullException()
         {
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.InternalServerError, string.Empty);
-            Connection connection = new Connection(mockHttpMessageHandler);
+            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+            Connection connection = new Connection(mockHttpClientFactory);
             Resolver resolver = new Resolver(connection);
 
             Assert.ThrowsExceptionAsync<ArgumentNullException>(() => resolver.Resolve(null));
@@ -35,7 +36,8 @@ namespace IdentityOverlayNetwork.Tests
         public void Resolve_InvalidInput_ThrowsArgumentException()
         {
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.InternalServerError, string.Empty);
-            Connection connection = new Connection(mockHttpMessageHandler);
+            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+            Connection connection = new Connection(mockHttpClientFactory);
             Resolver resolver = new Resolver(connection);
 
             Assert.ThrowsExceptionAsync<ArgumentException>(() => resolver.Resolve(string.Empty));
@@ -51,7 +53,8 @@ namespace IdentityOverlayNetwork.Tests
             string responseContent = "{\"document\":{}}";
 
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, responseContent);
-            Connection connection = new Connection(mockHttpMessageHandler);
+            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+            Connection connection = new Connection(mockHttpClientFactory);
             Resolver resolver = new Resolver(connection);
 
             JObject json = resolver.Resolve("did:ion:test").Result;

@@ -20,8 +20,8 @@ namespace IdentityOverlayNetwork.Tests
         public void PrepareIdentifier_InvalidInput_ThrowsArgumentNullException()
         {
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, "test_content");
-            Connection connection = new Connection(mockHttpMessageHandler);
-            IdentifiersController identifiersController = new IdentifiersController(connection);
+            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+            IdentifiersController identifiersController = new IdentifiersController(mockHttpClientFactory);
 
             Assert.ThrowsException<ArgumentNullException>(() => identifiersController.PrepareIdentifier(null));
         }
@@ -34,8 +34,8 @@ namespace IdentityOverlayNetwork.Tests
         public void PrepareIdentifier_InvalidInput_ThrowsArgumentException()
         {
             MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, "test_content");
-            Connection connection = new Connection(mockHttpMessageHandler);
-            IdentifiersController identifiersController = new IdentifiersController(connection);
+            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+            IdentifiersController identifiersController = new IdentifiersController(mockHttpClientFactory);
 
             Assert.ThrowsException<ArgumentException>(() => identifiersController.PrepareIdentifier(string.Empty));
             Assert.ThrowsException<ArgumentException>(() => identifiersController.PrepareIdentifier(" ")); //whitespace

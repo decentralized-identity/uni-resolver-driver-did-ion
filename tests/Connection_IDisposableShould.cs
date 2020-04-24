@@ -21,7 +21,10 @@ namespace IdentityOverlayNetwork.Tests
         {
             try
             {
-                Connection connection = new Connection(new MockHttpMessageHandler(HttpStatusCode.OK, string.Empty));
+                MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, "test_cotent");
+                MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+                Connection connection = new Connection(mockHttpClientFactory);
+
                 HttpContent content = connection.GetAsync("https://testuri").Result; // Call GetAsync so that local response message is populated
                 Assert.IsNotNull(connection);
                 connection.Dispose();

@@ -21,7 +21,8 @@ namespace IdentityOverlayNetwork.Tests
             try
             {
                 MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.InternalServerError, string.Empty);
-                Connection connection = new Connection(mockHttpMessageHandler);
+                MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
+                Connection connection = new Connection(mockHttpClientFactory);
                 Resolver resolver = new Resolver(connection);
                 
                 Assert.IsNotNull(resolver);
