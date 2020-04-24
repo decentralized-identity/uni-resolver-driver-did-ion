@@ -6,6 +6,12 @@ namespace IdentityOverlayNetwork.Configuration
     public class DriverConfiguration
     {
         /// <summary>
+        /// Gets or sets the <see cref="Resilience" />
+        /// section of the driver configuration.
+        /// </summary>
+        public Resilience Resilience { get; set; }
+
+        /// <summary>
         /// Gets or sets the <see cref="Consensus" />
         /// section of the driver configuration.
         /// </summary>

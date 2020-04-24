@@ -16,7 +16,7 @@ namespace IdentityOverlayNetwork
         /// Regular expression for matching DID methods supported
         /// by the driver.
         /// </summary>
-        public static readonly Regex SupportedMethods = new Regex("^did:(ion):(\\S*)$", MatchOptions, TimeSpan.FromMilliseconds(100)); 
+        public static readonly Regex SupportedMethods = new Regex("^did:(ion):(\\S*)$", MatchOptions, TimeSpan.FromMilliseconds(100));
 
         /// <summary>
         /// Constant declaring options for
@@ -33,7 +33,7 @@ namespace IdentityOverlayNetwork
         /// <summary>
         /// Has the object been disposed of?
         /// </summary>
-        private bool disposed  = false;
+        private bool disposed = false;
 
         /// <summary>
         /// Uses the regular expression to check if 
@@ -42,10 +42,10 @@ namespace IdentityOverlayNetwork
         /// </summary>
         /// <param name="identifier">The identifier to check.</param>
         /// <returns>True if <paramref name="identifier"> is supported, otherwise false.</returns>
-        public static bool IsSupported(string identifier) 
+        public static bool IsSupported(string identifier)
         {
             // Only do work if passed an identifier
-            if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrEmpty(identifier)) 
+            if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrEmpty(identifier))
             {
                 return false;
             }
@@ -58,7 +58,7 @@ namespace IdentityOverlayNetwork
         /// </summary>
         /// <param name="connection">The <see cref="Connection" /> to initialize the instance with.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="connection"> is null.</exception>
-        public Resolver(Connection connection) 
+        public Resolver(Connection connection)
         {
             // Set the private instance
             this.connection = connection.IsNull("connection");
@@ -73,29 +73,25 @@ namespace IdentityOverlayNetwork
         /// <returns>A string containing the resolved identifier document.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="argument"> is null.</exception>
         /// <exception cref="ArgumentException">Thrown when <paramref name="argument"> is empty or is whitespace.</exception>
-        public async Task<JObject> Resolve(string identifier) 
+        public async Task<JObject> Resolve(string identifier)
         {
-            
             // Check the argument
             identifier = identifier.IsPopulated("identifier");
 
-            // Define your base url //TODO configurable
-            // string discoveryUri = $"https://beta.discover.did.microsoft.com/1.0/identifiers/{identifier}";
-       
             JObject jsonDocument = null;
             using (HttpContent httpContent = await this.connection.GetAsync(identifier))
             {
                 // Read the document from the content
                 string document = await httpContent.ReadAsStringAsync();
 
-                if (!string.IsNullOrWhiteSpace(document)) 
+                if (!string.IsNullOrWhiteSpace(document))
                 {
                     jsonDocument = JObject.Parse(document);
                 }
             }
 
             return jsonDocument;
-        } 
+        }
 
         /// <summary>
         /// Dispose of the object
@@ -120,9 +116,9 @@ namespace IdentityOverlayNetwork
             // Update the flag to indicate dispose
             // has been called
             this.disposed = true;
-              
+
             // Despose of the connection
-            if (this.connection != null) 
+            if (this.connection != null)
             {
                 this.connection.Dispose();
             }

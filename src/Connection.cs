@@ -52,10 +52,11 @@ namespace IdentityOverlayNetwork
 
             // Get the http client
             //HttpClient httpClient = this.httpClientFactory.CreateClient("beta.discover");
-            HttpClient httpClient = this.httpClientFactory.CreateClient("henry.ion.node");
+            HttpClient httpClient = this.httpClientFactory.CreateClient("test.direct.ion");
 
             // TODO temporary workaround until I figure out
-            // baseaddress issue in getasync below
+            // why baseaddress is not included getasync below
+            // resulting in an invalid URI exception
             identifier = httpClient.BaseAddress.ToString() + identifier;
 
             // Await the response from the request

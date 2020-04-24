@@ -52,6 +52,7 @@ namespace IdentityOverlayNetwork.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ResponseCache(Duration=360)] // Cache the response for 5 mins
         [Produces("application/json")]
         [Route( "/1.0/identifiers/{identifier}" )]
         [HttpGet]
