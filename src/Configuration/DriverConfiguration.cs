@@ -9,18 +9,18 @@ namespace IdentityOverlayNetwork.Configuration
         /// Gets or sets the <see cref="Resilience" />
         /// section of the driver configuration.
         /// </summary>
-        public Resilience Resilience { get; set; }
+        public Resilience Resilience { get; set; } = new Resilience();
 
         /// <summary>
         /// Gets or sets the <see cref="Consensus" />
         /// section of the driver configuration.
         /// </summary>
-        public Consensus Consensus { get; set; }
+        public Consensus Consensus { get; set; } = new Consensus();
 
         /// <summary>
         /// Gets or sets the <see cref="Node" />
         /// array section of the driver configuration.
         /// </summary>
-        public Node[] Nodes { get; set; }
+        public Node[] Nodes { get; set; } = new Node[0];
     }
 }
