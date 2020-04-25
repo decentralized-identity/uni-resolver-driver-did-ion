@@ -43,7 +43,7 @@ namespace IdentityOverlayNetwork.Tests
             string testsFolder = currentDirectory.Substring(0, currentDirectory.IndexOf("bin"));
 
             IConfigurationRoot testConfig = new ConfigurationBuilder()
-                .AddJsonFile(testsFolder + "\\config.test.json", optional: false)
+                .AddJsonFile($"{testsFolder}{Path.DirectorySeparatorChar}config.test.json", optional: false)
                 .Build();
 
             DriverConfiguration driverConfiguration = new DriverConfiguration();
