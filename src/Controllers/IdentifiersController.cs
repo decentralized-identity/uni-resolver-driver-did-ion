@@ -4,8 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 
 namespace IdentityOverlayNetwork.Controllers
@@ -44,9 +42,31 @@ namespace IdentityOverlayNetwork.Controllers
         }
 
         /// <summary>
+        /// Checks if <paramref name="initialState"/> has
+        /// a value and if so appends as a query
+        /// string parameter to the identifier.
+        /// </summary>
+        /// <param name="identifier">The identifier to which to add the state.</param>
+        /// <param name="initialState">The initialState to add the identifier if not null.</param>
+        /// <returns>A string containing the identifier with state appended if exists in the request.</returns>
+        public static string PrepareIdentifier(string identifier, string initialState = null)
+        {
+            identifier = identifier.IsPopulated("identifier");
+
+            // Check if ION inital state has a value
+            if (initialState != null && !string.IsNullOrWhiteSpace(initialState)) 
+            {
+                identifier = $"{identifier}?{IdentifiersController.IonInitialStateKey}={initialState}";
+            }
+
+            return identifier;
+        }
+
+        /// <summary>
         /// GET method for resolving ION identifiers
         /// </summary>
         /// <param name="identifier">The identifier to resolve.</param>
+        /// <param name="initialState">The ion initial state if included in the request.</param>
         /// <returns>JSON document for the resolved identifier.</returns>
         /// <exception>Returns 400 BadRequest if <paramref name="identifier"> specifies an unsupported methdod.</exception>
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -56,7 +76,7 @@ namespace IdentityOverlayNetwork.Controllers
         [Produces("application/json")]
         [Route( "/1.0/identifiers/{identifier}" )]
         [HttpGet]
-        public async Task<IActionResult> Get(string identifier)
+        public async Task<IActionResult> Get(string identifier, [FromQuery(Name = IonInitialStateKey)] string initialState = null)
         {   
             if (!Resolver.IsSupported(identifier))
             {
@@ -77,7 +97,7 @@ namespace IdentityOverlayNetwork.Controllers
             {
                 using (Resolver resolver = new Resolver(this.connection))
                 {
-                    document = await resolver.Resolve(this.PrepareIdentifier(identifier));
+                    document = await resolver.Resolve(IdentifiersController.PrepareIdentifier(identifier, initialState));
                 }
             }
             catch (ConnectionException connectionException) 
@@ -106,29 +126,6 @@ namespace IdentityOverlayNetwork.Controllers
             }
             
             return Json(document);
-        }
-
-        /// <summary>
-        /// Checks to see if the original request included
-        /// initial state and if so appends as a query
-        /// string parameter to the identifier.
-        /// </summary>
-        /// <param name="identifier">The identifier to which to add the state.</param>
-        /// <returns>A string containing the identifier with state appended if exists in the request.</returns>
-        public string PrepareIdentifier(string identifier)
-        {
-            identifier = identifier.IsPopulated("identifier");
-
-            // Check if ION inital state included in the
-            // query. If so ensure that we include in
-            // the resolve.
-            StringValues initialState = string.Empty;
-            if (Request != null && Request.Query.TryGetValue(IdentifiersController.IonInitialStateKey, out initialState)) 
-            {
-                identifier = $"{identifier}?{IdentifiersController.IonInitialStateKey}={initialState}";
-            }
-
-            return identifier;
         }
 
         /// <summary>
