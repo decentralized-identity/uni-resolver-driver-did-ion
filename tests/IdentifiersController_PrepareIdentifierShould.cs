@@ -19,11 +19,7 @@ namespace IdentityOverlayNetwork.Tests
         [TestMethod]
         public void PrepareIdentifier_InvalidInput_ThrowsArgumentNullException()
         {
-            MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, "test_content");
-            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
-            IdentifiersController identifiersController = new IdentifiersController(mockHttpClientFactory);
-
-            Assert.ThrowsException<ArgumentNullException>(() => identifiersController.PrepareIdentifier(null));
+            Assert.ThrowsException<ArgumentNullException>(() => IdentifiersController.PrepareIdentifier(null));
         }
 
         /// <summary>
@@ -33,12 +29,38 @@ namespace IdentityOverlayNetwork.Tests
         [TestMethod]
         public void PrepareIdentifier_InvalidInput_ThrowsArgumentException()
         {
-            MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, "test_content");
-            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
-            IdentifiersController identifiersController = new IdentifiersController(mockHttpClientFactory);
+            Assert.ThrowsException<ArgumentException>(() => IdentifiersController.PrepareIdentifier(string.Empty));
+            Assert.ThrowsException<ArgumentException>(() => IdentifiersController.PrepareIdentifier(" ")); //whitespace
+        }
 
-            Assert.ThrowsException<ArgumentException>(() => identifiersController.PrepareIdentifier(string.Empty));
-            Assert.ThrowsException<ArgumentException>(() => identifiersController.PrepareIdentifier(" ")); //whitespace
+        /// <summary>
+        /// Verifies that the identifier is returned
+        /// unmodified if no initial state.
+        /// </summary>
+        [TestMethod]
+        public void PrepareIdentifier_NoInitialState_ReturnsIdentifier()
+        {
+            Assert.AreEqual("testIdentifier", IdentifiersController.PrepareIdentifier("testIdentifier"));
+        }
+
+        /// <summary>
+        /// Verifies that the identifier is returned
+        /// unmodified if initial state is whitespace.
+        /// </summary>
+        [TestMethod]
+        public void PrepareIdentifier_InitialStateWhiteSpace_ReturnsIdentifier()
+        {
+            Assert.AreEqual("testIdentifier", IdentifiersController.PrepareIdentifier("testIdentifier", "  "));
+        }
+
+        /// <summary>
+        /// Verifies that the identifier is returned
+        /// with correctly formatted initial state.
+        /// </summary>
+        [TestMethod]
+        public void PrepareIdentifier_InitialStateIncluded_ReturnsIdentifierAndInitialState()
+        {
+            Assert.AreEqual("testIdentifier?-ion-initial-state=testState", IdentifiersController.PrepareIdentifier("testIdentifier", "testState"));
         }
     }
 }
