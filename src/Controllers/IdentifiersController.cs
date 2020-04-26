@@ -24,21 +24,28 @@ namespace IdentityOverlayNetwork.Controllers
         private const string IonInitialStateKey = "-ion-initial-state";
 
         /// <summary>
-        /// Instance of the <see cref="connection" /> for making the
+        /// Instance of the <see cref="Connection" /> for making the
         /// resolution requests.
         /// </summary>
         private readonly Connection connection;
+        
+        /// <summary>
+        /// Instance of the <see cref="IHttpContextAccessor" /> for
+        /// accessing the http context.
+        /// </summary>
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Resolver" /> class.
         /// </summary>
-        /// <param name="httpClientFactory">The <see cref="IHttpClientFactory" /> to initialize the instance with. Injecteed from service context when being called from servvice.null</param>
+        /// <param name="httpClientFactory">The <see cref="IHttpClientFactory" /> to initialize the instance with. Injected from service context when being called from service.</param>
+        /// <param name="httpContextAccessor">The <see cref="IHttpContextAccessor" /> to initialize the instance with. Injected from service context when being called from service.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="httpClientFactory"> is null.</exception>
-        //public IdentifiersController([FromServices] Connection connection) 
-        public IdentifiersController([FromServices] IHttpClientFactory httpClientFactory)
+        public IdentifiersController([FromServices] IHttpClientFactory httpClientFactory, [FromServices] IHttpContextAccessor httpContextAccessor)
         {
-            // Set the private instance
+            // Set the private instances
             this.connection = new Connection(httpClientFactory.IsNull("connection"));
+            this.httpContextAccessor = httpContextAccessor.IsNull("httpContextAccessor");
         }
 
         /// <summary>
@@ -86,7 +93,7 @@ namespace IdentityOverlayNetwork.Controllers
                     Message = "The specified DID method is not supported. Only ION (https://github.com/decentralized-identity/ion) based identifiers can be resolved.",
                     Type = Error.Types.RequestResolveIdentifier,
                     Code = Error.Codes.UnsupportedDidMethod,
-                    CorrelationId = this.GetCorrelationId()
+                    CorrelationId = CorrelationIdentifier.Get(this.httpContextAccessor)
                 };
 
                 return BadRequest(unsupportedIdentifier);
@@ -116,7 +123,7 @@ namespace IdentityOverlayNetwork.Controllers
                     Message = connectionException.ReasonPhrase,
                     Type = Error.Types.RequestResolveIdentifier,
                     Code = Error.Codes.RemoteServiceError,
-                    CorrelationId = this.GetCorrelationId(),
+                    CorrelationId =  CorrelationIdentifier.Get(this.httpContextAccessor)
                 };
 
                 return new ObjectResult(connectionError)
@@ -126,16 +133,6 @@ namespace IdentityOverlayNetwork.Controllers
             }
             
             return Json(document);
-        }
-
-        /// <summary>
-        /// Gets the correlation id to use in errors.null If HttpContext exists
-        /// uses the TraceIdentifier from that otherwise returns a <see cref="Guid" />
-        /// </summary>
-        /// <returns>A string conatning the correlation id.</returns>
-        private string GetCorrelationId() 
-        {
-            return (HttpContext != null && !string.IsNullOrWhiteSpace(HttpContext.TraceIdentifier)) ? HttpContext.TraceIdentifier : Guid.NewGuid().ToString();
         }
     }
 }

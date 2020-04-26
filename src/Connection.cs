@@ -52,7 +52,7 @@ namespace IdentityOverlayNetwork
 
             // Get the http client TODO Update factory logic to return default
             // client and support random client selection etc
-            HttpClient httpClient = this.httpClientFactory.CreateClient("test.direct.ion");
+            HttpClient httpClient = this.httpClientFactory.CreateClient("default");
 
             // TODO temporary workaround until I figure out
             // why baseaddress is not included getasync below

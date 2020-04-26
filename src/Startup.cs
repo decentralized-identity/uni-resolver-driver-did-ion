@@ -2,6 +2,7 @@ using System;
 using IdentityOverlayNetwork.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,6 +61,9 @@ namespace IdentityOverlayNetwork
             services
                 .AddControllers()
                 .AddNewtonsoftJson();
+
+            // Inject the http context accessor
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add response caching
             services.AddResponseCaching();
