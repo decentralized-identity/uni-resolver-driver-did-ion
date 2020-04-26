@@ -10,7 +10,7 @@
     },
     "Nodes": [
       {
-        "Name": "beta.discover.microsoft",
+        "Name": "default",
         "Uri": "https://beta.discover.did.microsoft.com/1.0/identifiers/",
         "TimeoutInMilliseconds": "5000",
         "Use": "Always",
