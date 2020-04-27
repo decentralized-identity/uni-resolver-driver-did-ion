@@ -23,6 +23,7 @@ namespace IdentityOverlayNetwork.Tests
             {
                 var mockConfiguration = new Mock<IConfiguration>();
                 Startup startup = new Startup(mockConfiguration.Object);
+                Assert.IsNotNull(startup.Configuration);
             }
             catch (Exception exception)
             {

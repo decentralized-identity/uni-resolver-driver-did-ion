@@ -1,6 +1,7 @@
 using System;
-using System.Net;
+using System.Net.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace IdentityOverlayNetwork.Tests
 {
@@ -20,9 +21,8 @@ namespace IdentityOverlayNetwork.Tests
         {
             try
             {
-                MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.InternalServerError, string.Empty);
-                MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
-                Connection connection = new Connection(mockHttpClientFactory);
+                var mockHttpClientFactory = new Mock<IHttpClientFactory>();
+                Connection connection = new Connection(mockHttpClientFactory.Object);
                 Resolver resolver = new Resolver(connection);
                 
                 Assert.IsNotNull(resolver);
@@ -30,7 +30,7 @@ namespace IdentityOverlayNetwork.Tests
                 resolver.Dispose();
                 resolver.Dispose(); // Multiple calls to dispose shouldn't error as flag should be set
             }
-            catch (Exception exception)
+            catch (Exception exception) 
             {
                 throw new AssertFailedException($"Unexpected exception '{exception.Message}' executing 'Resolver.Dispose()'. See inner exception for more details.", exception);
             }

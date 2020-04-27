@@ -1,7 +1,11 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Moq.Protected;
 
 namespace IdentityOverlayNetwork.Tests
 {
@@ -19,10 +23,8 @@ namespace IdentityOverlayNetwork.Tests
         [TestMethod]
         public void GetSync_InvalidInput_ThrowsArgumentNullException()
         {
-            MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.InternalServerError, string.Empty);
-            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
-            Connection connection = new Connection(mockHttpClientFactory);
-            
+            Connection connection = new Connection(new Mock<IHttpClientFactory>().Object);
+
             Assert.ThrowsExceptionAsync<ArgumentNullException>(() => connection.GetAsync(null));
         }
 
@@ -33,9 +35,7 @@ namespace IdentityOverlayNetwork.Tests
         [TestMethod]
         public void GetSync_InvalidInput_ThrowsArgumentException()
         {
-            MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.InternalServerError, string.Empty);
-            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
-            Connection connection = new Connection(mockHttpClientFactory);
+            Connection connection = new Connection(new Mock<IHttpClientFactory>().Object);
 
             Assert.ThrowsExceptionAsync<ArgumentException>(() => connection.GetAsync(string.Empty));
             Assert.ThrowsExceptionAsync<ArgumentException>(() => connection.GetAsync(" "));
@@ -48,9 +48,27 @@ namespace IdentityOverlayNetwork.Tests
         [TestMethod]
         public void GetSync_ValidInput_ReturnsContent()
         {
-            MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, "test_content");
-            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
-            Connection connection = new Connection(mockHttpClientFactory);
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+            mockHttpMessageHandler
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),  ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage()
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("test_content")
+                    });
+
+            HttpClient httpClient = new HttpClient(mockHttpMessageHandler.Object)
+            {
+                BaseAddress = new Uri("https://test.org")
+            };
+                
+            var mockHttpClientFactory = new Mock<IHttpClientFactory>();
+            mockHttpClientFactory
+                .Setup(x => x.CreateClient(It.IsAny<string>()))
+                .Returns(httpClient);
+
+            Connection connection = new Connection(mockHttpClientFactory.Object);
 
             using (HttpContent httpContent = connection.GetAsync("https://requestUri").Result)
             {
@@ -70,9 +88,27 @@ namespace IdentityOverlayNetwork.Tests
         [TestMethod]
         public void GetSync_ValidInput_ThrowsConnectionException()
         {
-            MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.BadRequest, "test_error_response");
-            MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
-            Connection connection = new Connection(mockHttpClientFactory);
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+            mockHttpMessageHandler
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),  ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage()
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Content = new StringContent("test_error_response")
+                    });
+
+            HttpClient httpClient = new HttpClient(mockHttpMessageHandler.Object)
+            {
+                BaseAddress = new Uri("https://test.org")
+            };
+                
+            var mockHttpClientFactory = new Mock<IHttpClientFactory>();
+            mockHttpClientFactory
+                .Setup(x => x.CreateClient(It.IsAny<string>()))
+                .Returns(httpClient);
+
+            Connection connection = new Connection(mockHttpClientFactory.Object);
 
             Assert.ThrowsExceptionAsync<ConnectionException>(() => connection.GetAsync("requestUri"));
         }

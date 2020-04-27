@@ -1,7 +1,11 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Moq.Protected;
 
 namespace IdentityOverlayNetwork.Tests
 {
@@ -21,9 +25,27 @@ namespace IdentityOverlayNetwork.Tests
         {
             try
             {
-                MockHttpMessageHandler mockHttpMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK, "test_cotent");
-                MockHttpClientFactory mockHttpClientFactory = new MockHttpClientFactory(mockHttpMessageHandler);
-                Connection connection = new Connection(mockHttpClientFactory);
+                var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+                mockHttpMessageHandler
+                    .Protected()
+                    .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),  ItExpr.IsAny<CancellationToken>())
+                    .ReturnsAsync(new HttpResponseMessage()
+                        {
+                            StatusCode = HttpStatusCode.OK,
+                            Content = new StringContent("test_content")
+                        });
+
+                HttpClient httpClient = new HttpClient(mockHttpMessageHandler.Object)
+                {
+                    BaseAddress = new Uri("https://test.org")
+                };
+                    
+                var mockHttpClientFactory = new Mock<IHttpClientFactory>();
+                mockHttpClientFactory
+                    .Setup(x => x.CreateClient(It.IsAny<string>()))
+                    .Returns(httpClient);
+
+                Connection connection = new Connection(mockHttpClientFactory.Object);
 
                 HttpContent content = connection.GetAsync("https://testuri").Result; // Call GetAsync so that local response message is populated
                 Assert.IsNotNull(connection);

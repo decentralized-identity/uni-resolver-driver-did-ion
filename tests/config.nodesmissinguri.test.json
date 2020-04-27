@@ -1,0 +1,20 @@
+{
+  "DriverConfiguration": {
+    "Resilience": {
+      "EnableRetry": true,
+      "EnableCircuitBreaking": true
+    },
+    "Consensus": {
+      "Model": "FirstWins",
+      "InAgreement": "1"
+    },
+    "Nodes": [
+      {
+        "Name": "test.node",
+        "TimeoutInMilliseconds": "100",
+        "Use": "Always",
+        "AllowCaching": true
+      }
+    ]
+  }
+}
