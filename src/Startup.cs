@@ -38,26 +38,30 @@ namespace IdentityOverlayNetwork
         }  
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Startup" /> class.
-        /// </summary>
-        /// <param name="configuration">The <see cref="IConfiguration" /> for conifguring the application.</param>
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        /// <summary>
         /// Returns the <see cref="IConfiguration" /> for the application.
         /// </summary>
         /// <value>The <see cref="IConfiguration" /> for the application.</value>
-        public IConfiguration Configuration { get; }
+        public virtual IConfiguration Configuration { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup" /> class.
+        /// </summary>
+        /// <param name="configuration">The <see cref="IConfiguration" /> for configuring the application.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="configuration"/> is null.</exception>
+        public Startup(IConfiguration configuration)
+        {
+            Configuration =  configuration.IsNull("configuration");;
+        }
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to add services to the container.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection" /> which to configure.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="services"/> is null.</exception>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.IsNull("services");
+
             services
                 .AddControllers()
                 .AddNewtonsoftJson();
@@ -98,16 +102,20 @@ namespace IdentityOverlayNetwork
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
-        /// <param name="app">The <see cref="IApplicationBuilder" /> to configure.</param>
-        /// <param name="env">The <see cref="IWebHostEnvironment" /> to configure.</param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        /// <param name="applicationBuilder">The <see cref="IApplicationBuilder" /> to configure.</param>
+        /// <param name="webHostEnvironment">The <see cref="IWebHostEnvironment" /> to configure.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="applicationBuilder"/> or <paramref name="webHostEnvironment"/> are null.</exception>
+        public void Configure(IApplicationBuilder applicationBuilder, IWebHostEnvironment webHostEnvironment)
         {
-            if (env.IsDevelopment())
+            applicationBuilder.IsNull("applicationBuilder");
+            webHostEnvironment.IsNull("webHostEnvironment");
+
+            if (webHostEnvironment.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                applicationBuilder.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection()
+            applicationBuilder.UseHttpsRedirection()
                .UseRouting()
                .UseResponseCaching()
                .UseResponseCompression()
@@ -124,9 +132,10 @@ namespace IdentityOverlayNetwork
         /// <param name="services">The <see cref="IServiceCollection" /> which to configure.</param>
         /// </summary>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="services"/> is null.</exception>
-        /// <exception cref="StartupException">Throw when the appsettings.json does not include a driver configuration section.</exception>
-        /// <exception cref="StartupException">Throw when the appsettings.json driver configuration section does not include any nodes.</exception>
-        public void ConfigureHttpClients(IServiceCollection services)
+        /// <exception cref="StartupException">Throw when the configuration json file driver configuration section does not include any nodes.</exception>
+        /// <exception cref="StartupException">Throw when the appsettings.json a node in the nodes section does not specify a name.</exception>
+        /// <exception cref="StartupException">Throw when the appsettings.json a node in the nodes section does not specify a Uri.</exception>
+        public virtual void ConfigureHttpClients(IServiceCollection services)
         {
             services.IsNull("services");
 
@@ -134,24 +143,29 @@ namespace IdentityOverlayNetwork
             DriverConfiguration driverConfiguration = new DriverConfiguration();
             Configuration.GetSection("DriverConfiguration").Bind(driverConfiguration);
 
-            // Check driver configuration is specified
-            if (driverConfiguration == null)
-            {
-                throw new StartupException("'config.json' does not specify a DriverConfiguration section.");
-            }
-
             // Check nodes are specified
             if (driverConfiguration.Nodes == null || driverConfiguration.Nodes.Length == 0)
             {
-                throw new StartupException("'config.json' DriverConfiguration section does not specify any nodes.");
+                throw new StartupException("Configuration json file 'DriverConfiguration' section does not specify any nodes.");
             }
 
             // For each node, add an HttpClient to the services
             foreach (Node node in driverConfiguration.Nodes)
             {
+                // Check that a 
+                if (node.Name == null || string.IsNullOrWhiteSpace(node.Name))
+                {
+                    throw new StartupException("Configuration json file 'DriverConfiguration.Nodes' section specifies a node without a name. Name is required.");
+                }
+
+                if (node.Uri == null)
+                {
+                    throw new StartupException("Configuration json file 'DriverConfiguration.Nodes' section specifies a node without a uri. Uri is required.");
+                }
+
                 // Add the Microsoft discovery service http client
                 IHttpClientBuilder httpClientBuilder = services
-                    .AddHttpClient(node.Name.IsPopulated("node.name"), client =>
+                    .AddHttpClient(node.Name, client =>
                     {
                         client.BaseAddress = node.Uri;
                         client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -159,7 +173,7 @@ namespace IdentityOverlayNetwork
                     });
 
                 // Addd the retry policies to the client
-                Startup.AddResiliencePolicy(httpClientBuilder, driverConfiguration.Resilience);
+                this.AddResiliencePolicy(httpClientBuilder, driverConfiguration.Resilience);
             }
         }
 
@@ -171,7 +185,7 @@ namespace IdentityOverlayNetwork
         /// <param name="httpClientBuilder">The <see cref="IHttpClientBuilder"/> to add the policy to.</param>
         /// <param name="resilience">The <see cref="Resilience"/> instance with the settings for the service.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="httpClientBuilder"/> or <paramref name="resilience"/> are null.</exception>
-        public static void AddResiliencePolicy(IHttpClientBuilder httpClientBuilder, Resilience resilience)
+        public virtual void AddResiliencePolicy(IHttpClientBuilder httpClientBuilder, Resilience resilience)
         {
             httpClientBuilder.IsNull("httpClientBuilder");
             resilience.IsNull("resilience");

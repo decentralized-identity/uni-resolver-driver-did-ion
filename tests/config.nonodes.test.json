@@ -1,0 +1,13 @@
+{
+    "DriverConfiguration": {
+      "Resilience": {
+        "EnableRetry": true,
+        "EnableCircuitBreaking": true
+      },
+      "Consensus": {
+        "Model": "FirstWins",
+        "InAgreement": "1"
+      }
+    }
+  }
+  
