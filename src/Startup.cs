@@ -72,21 +72,28 @@ namespace IdentityOverlayNetwork
             // Add response caching
             services.AddResponseCaching();
 
-            // Create apolicy registery and register
+            // Create apolicy registry and register
             // the default policies.
             PolicyRegistry policyRegistry = new PolicyRegistry()
             {
-                 { ResiliencePolicy.DefaultRetry, HttpPolicyExtensions
+                 { 
+                   ResiliencePolicy.DefaultRetry, 
+                   HttpPolicyExtensions
                     .HandleTransientHttpError()
                     .OrResult(response => (int)response.StatusCode == 429)
-                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))) },
-                 { ResiliencePolicy.DefaultCircuitbreaker, HttpPolicyExtensions
+                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))) 
+                 },
+                 { 
+                    ResiliencePolicy.DefaultCircuitbreaker, 
+                    HttpPolicyExtensions
                     .HandleTransientHttpError()
-                    .OrResult(response => (int)response.StatusCode == 429)
-                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))) }
+                    .CircuitBreakerAsync(
+                        handledEventsAllowedBeforeBreaking: 3,
+                        durationOfBreak: TimeSpan.FromSeconds(30))
+                 }
             };
             
-            // Add the registery to the services
+            // Add the registry to the services
             services.AddPolicyRegistry(policyRegistry);
 
             // Add response compression

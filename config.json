@@ -19,7 +19,7 @@
       {
         "Name": "test.direct.ion",
         "Uri": "http://10.91.6.163:3000/",
-        "TimeoutInMilliseconds": "10000",
+        "TimeoutInMilliseconds": "5000",
         "Use": "Random",
         "AllowCaching": true
       }
