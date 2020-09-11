@@ -46,3 +46,10 @@ steps:
     summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml'
     reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
     failIfCoverageEmpty: true
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'UniversalResolver.Ion.Driver'
+    repository: 'ion'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
