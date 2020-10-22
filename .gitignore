@@ -3,3 +3,4 @@
 tests/TestResults
 coverage.json
 .vscode/solution-explorer
+*.sln
