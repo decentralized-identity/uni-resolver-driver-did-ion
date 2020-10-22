@@ -10,7 +10,7 @@ WORKDIR /src
 COPY uni-resolver-driver-did-ion.csproj .
 RUN dotnet restore "./uni-resolver-driver-did-ion.csproj"
 COPY . .
-WORKDIR /src/.
+WORKDIR /src
 RUN dotnet build "uni-resolver-driver-did-ion.csproj" -c Release -o /app/build
 
 FROM build AS publish
