@@ -28,16 +28,16 @@ namespace IdentityOverlayNetwork
 
                                     // Get the hosting environment
                                     IWebHostEnvironment hostingEnvironment = hostingContext.HostingEnvironment;
-
+                                    
                                     // Add the default .netcore appsettings
                                     config
-                                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                                        .AddJsonFile($"appsettings.json", optional: true, reloadOnChange: true)
                                         .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json",
                                                         optional: true, reloadOnChange: true);
 
                                     // Add driver specific config
                                     config
-                                        .AddJsonFile("config.json", optional: false, reloadOnChange: true)
+                                        .AddJsonFile($"config.json", optional: false, reloadOnChange: true)
                                         .AddJsonFile($"config.{hostingEnvironment.EnvironmentName}.json",
                                                         optional: true, reloadOnChange: true);
 

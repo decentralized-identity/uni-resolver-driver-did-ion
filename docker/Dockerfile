@@ -1,16 +1,16 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 WORKDIR /app
+LABEL maintainer="code@global.ly"
 
-ENV ASPNETCORE_URLS http://+:5000
-
-EXPOSE 5000
+EXPOSE 8080
+ENV ASPNETCORE_URLS http://+:8080
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /src
 COPY ["uni-resolver-driver-did-ion.csproj", "./"]
 RUN dotnet restore "./uni-resolver-driver-did-ion.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR /src/.
 RUN dotnet build "uni-resolver-driver-did-ion.csproj" -c Release -o /app/build
 
 FROM build AS publish
