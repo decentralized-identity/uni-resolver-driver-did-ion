@@ -7,7 +7,7 @@ ENV ASPNETCORE_URLS http://+:8080
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /src
-COPY ["uni-resolver-driver-did-ion.csproj", "./"]
+COPY ["uni-resolver-driver-did-ion.csproj", "./src"]
 RUN dotnet restore "./uni-resolver-driver-did-ion.csproj"
 COPY . .
 WORKDIR /src/.
