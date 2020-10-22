@@ -47,7 +47,7 @@
             "dockerBuild": {
                 "tag": "uniresolverdriverdidion:dev",
                 "target": "base",
-                "dockerfile": "${workspaceFolder}/Dockerfile",
+                "dockerfile": "${workspaceFolder}/docker/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
@@ -63,7 +63,7 @@
             ],
             "dockerBuild": {
                 "tag": "uniresolverdriverdidion:latest",
-                "dockerfile": "${workspaceFolder}/Dockerfile",
+                "dockerfile": "${workspaceFolder}/docker/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },

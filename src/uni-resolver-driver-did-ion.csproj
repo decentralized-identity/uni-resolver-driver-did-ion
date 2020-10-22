@@ -15,10 +15,4 @@
     <PackageReference Include="Polly.Caching.Memory" Version="3.0.2" />
   </ItemGroup>
 
-<ItemGroup>
-  <Content Update="config.json">
-    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-  </Content>
-</ItemGroup>
-
 </Project>
