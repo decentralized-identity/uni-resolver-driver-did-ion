@@ -1,14 +1,28 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS publish
-WORKDIR /working
-COPY . .
-RUN dotnet publish "src/uni-resolver-driver-did-ion.csproj" -c Release -o /app/publish
-ENV DOTNET_USE_POLLING_FILE_WATCHER=true
-EXPOSE 8080
+# Use Apline Linux
+ARG VERSION=3.1-alpine
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS final
+FROM mcr.microsoft.com/dotnet/core/sdk:$VERSION as build-env
+
+# Publish the app as self-contained, a single binary and
+# trim any unneccesary .NET core functionality
 WORKDIR /app
-LABEL maintainer="code@global.ly"
-COPY --from=publish /app/publish .
-ENV ASPNETCORE_URLS http://+:8080
-ENTRYPOINT ["dotnet", "uni-resolver-driver-did-ion.dll"]
+ADD /src .
+RUN dotnet publish \
+  --runtime alpine-x64 \
+  --self-contained true \
+  /p:PublishTrimmed=true \
+  /p:PublishSingleFile=true \
+  -c Release \
+  -o ./output
 
+# Use core runtime dependencies rather
+FROM mcr.microsoft.com/dotnet/core/runtime-deps:$VERSION
+WORKDIR /app
+COPY --from=build-env /app/output .
+ENV \
+  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 \
+  DOTNET_RUNNING_IN_CONTAINER=true \
+  ASPNETCORE_URLS=http://+:8080
+
+EXPOSE 8080
+ENTRYPOINT ["./uni-resolver-driver-did-ion"]
