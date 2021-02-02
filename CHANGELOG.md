@@ -9,7 +9,7 @@ ION v1 now running on Bitcoin MainNet. See [ION v1](https://github.com/decentral
 
 ### Changed
 - refactor!: Removed **-ion-initial-state** from identifier parsing.
-- refector: Removed associated route handling.
+- refactor: Removed associated route handling.
 - refactor: Removed redundant code and tests.
 - fix: linting issues
 

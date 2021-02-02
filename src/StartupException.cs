@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace IdentityOverlayNetwork
 {
@@ -6,7 +7,8 @@ namespace IdentityOverlayNetwork
     /// The exception that is thrown when an exception
     /// occurs during start up.
     /// </summary>
-    public class StartupException : Exception
+    [Serializable]
+    public class StartupException : Exception, ISerializable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StartupException" /> class.
@@ -31,6 +33,15 @@ namespace IdentityOverlayNetwork
         /// <param name="message">Exception message</param>
         public StartupException(string message)
             : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StartupException" /> class.
+        /// </summary>
+        /// <param name="serializationInfo">The <see cref="SerializationInfo" /> from which to create the instance.</param>
+        /// <param name="streamingContext">The <see cref="StreamingContext" /> used by serialization.</param>
+        public StartupException(SerializationInfo serializationInfo, StreamingContext streamingContext)
         {
         }
     }

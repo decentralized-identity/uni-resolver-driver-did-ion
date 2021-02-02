@@ -23,7 +23,7 @@ namespace IdentityOverlayNetwork
             }
 
             // Check for whitespace
-            if (string.IsNullOrWhiteSpace(argument) || string.IsNullOrEmpty(argument)) {
+            if (string.IsNullOrEmpty(argument) || string.IsNullOrWhiteSpace(argument)) {
                 throw new ArgumentException(argumentName);
             }
 

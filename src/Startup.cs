@@ -50,7 +50,7 @@ namespace IdentityOverlayNetwork
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="configuration"/> is null.</exception>
         public Startup(IConfiguration configuration)
         {
-            Configuration =  configuration.IsNull("configuration");;
+            Configuration = configuration.IsNull("configuration");
         }
 
         /// <summary>

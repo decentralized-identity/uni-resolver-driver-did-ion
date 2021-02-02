@@ -18,12 +18,6 @@ namespace IdentityOverlayNetwork.Controllers
     public class IdentifiersController : Controller
     {
         /// <summary>
-        /// Constant for the ION initial state querystring
-        /// parameter key.
-        /// </summary>
-        private const string IonInitialStateKey = "-ion-initial-state";
-
-        /// <summary>
         /// Instance of the <see cref="Connection" /> for making the
         /// resolution requests.
         /// </summary>
@@ -49,31 +43,9 @@ namespace IdentityOverlayNetwork.Controllers
         }
 
         /// <summary>
-        /// Checks if <paramref name="initialState"/> has
-        /// a value and if so appends as a query
-        /// string parameter to the identifier.
-        /// </summary>
-        /// <param name="identifier">The identifier to which to add the state.</param>
-        /// <param name="initialState">The initialState to add the identifier if not null.</param>
-        /// <returns>A string containing the identifier with state appended if exists in the request.</returns>
-        public static string PrepareIdentifier(string identifier, string initialState = null)
-        {
-            identifier = identifier.IsPopulated("identifier");
-
-            // Check if ION inital state has a value
-            if (initialState != null && !string.IsNullOrWhiteSpace(initialState)) 
-            {
-                identifier = $"{identifier}?{IdentifiersController.IonInitialStateKey}={initialState}";
-            }
-
-            return identifier;
-        }
-
-        /// <summary>
-        /// GET method for resolving ION identifiers
+        /// GET method for resolving ION identifiers.
         /// </summary>
         /// <param name="identifier">The identifier to resolve.</param>
-        /// <param name="initialState">The ion initial state if included in the request.</param>
         /// <returns>JSON document for the resolved identifier.</returns>
         /// <exception>Returns 400 BadRequest if <paramref name="identifier"> specifies an unsupported methdod.</exception>
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -83,7 +55,7 @@ namespace IdentityOverlayNetwork.Controllers
         [Produces("application/json")]
         [Route( "/1.0/identifiers/{identifier}" )]
         [HttpGet]
-        public async Task<IActionResult> Get(string identifier, [FromQuery(Name = IonInitialStateKey)] string initialState = null)
+        public async Task<IActionResult> Get(string identifier)
         {   
             if (!Resolver.IsSupported(identifier))
             {
@@ -104,7 +76,7 @@ namespace IdentityOverlayNetwork.Controllers
             {
                 using (Resolver resolver = new Resolver(this.connection))
                 {
-                    document = await resolver.Resolve(IdentifiersController.PrepareIdentifier(identifier, initialState));
+                    document = await resolver.Resolve(identifier);
                 }
             }
             catch (ConnectionException connectionException) 
