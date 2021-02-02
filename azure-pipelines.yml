@@ -62,3 +62,6 @@ steps:
     summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml'
     reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
     failIfCoverageEmpty: true
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
