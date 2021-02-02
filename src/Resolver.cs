@@ -45,7 +45,7 @@ namespace IdentityOverlayNetwork
         public static bool IsSupported(string identifier)
         {
             // Only do work if passed an identifier
-            if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrEmpty(identifier))
+            if (string.IsNullOrEmpty(identifier) || string.IsNullOrWhiteSpace(identifier))
             {
                 return false;
             }

@@ -1,4 +1,4 @@
-# Use Apline Linux
+# Use Alpine Linux
 ARG VERSION=3.1-alpine
 
 FROM mcr.microsoft.com/dotnet/core/sdk:$VERSION as build-env

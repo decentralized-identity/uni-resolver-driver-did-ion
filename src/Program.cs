@@ -7,7 +7,7 @@ namespace IdentityOverlayNetwork
     /// <summary>
     /// Main class for the application.
     /// </summary>
-    public class Program
+    public static class Program
     {
         /// <summary>
         /// Main entry point for the application.
