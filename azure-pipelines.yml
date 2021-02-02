@@ -18,10 +18,20 @@ steps:
   inputs:
     version: '3.1.x'
     packageType: runtime
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'codegloablly'
+    scannerMode: 'MSBuild'
+    projectKey: 'bmurdoch_uni-resolver-driver-did-ion'
+    projectName: 'uni-resolver-driver-did-ion'
   
   # build all projects
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: "Build ION driver"
+- task: ReviewApp@0
+  inputs:
+    resourceName: 'ION Universal Resolver Driver'
 - task: DotNetCoreCLI@2
   displayName: "Execute unit tests"
   inputs:
