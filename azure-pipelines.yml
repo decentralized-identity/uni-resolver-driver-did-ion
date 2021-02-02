@@ -47,9 +47,9 @@ steps:
 #  displayName: "Generate coverage report"
 - task: reportgenerator@4
   inputs:
-    reports: 'coverage.xml'
+    reports: 'tests/coverage.cobertura.xml'
     targetdir: 'CodeCoverage'
-    sourcedirs: '/tests/**/coverage.cobertura.xml'
+    verbosity: Verbose
     title: 'Generate coverage report'
 
 # Publish the code coverage result (summary and web site)
